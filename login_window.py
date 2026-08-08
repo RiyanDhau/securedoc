@@ -26,7 +26,7 @@ class LoginWindow(QWidget):
     def _build_ui(self):
         outer_layout = QVBoxLayout()
 
-        title = QLabel("Secure Document Management System")
+        title = QLabel("ByteForge")
         title.setAlignment(Qt.AlignCenter)
         title.setStyleSheet("font-size: 16px; font-weight: bold; margin-bottom: 10px;")
         outer_layout.addWidget(title)
