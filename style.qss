@@ -1,0 +1,262 @@
+/* ============================================================
+   STEGANSHIELD - App Stylesheet
+   Theme: deep navy + cyan accent (security / stealth feel)
+   ============================================================ */
+
+QWidget {
+    background-color: #F4F6F9;
+    color: #1E293B;
+    font-family: "Segoe UI", "Ubuntu", "Cantarell", sans-serif;
+    font-size: 13px;
+}
+
+QMainWindow {
+    background-color: #F4F6F9;
+}
+
+/* ---------- Brand panel (login screen left side) ---------- */
+
+QWidget#brandPanel {
+    background: transparent;
+    border: none;
+}
+
+QLabel#brandTitle {
+    color: #FFFFFF;
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+QLabel#brandTagline {
+    color: #7DD3E8;
+    font-size: 13px;
+}
+
+QLabel#brandIcon {
+    font-size: 46px;
+}
+
+/* ---------- Headings / labels ---------- */
+
+QLabel {
+    color: #1E293B;
+}
+
+QLabel[role="title"] {
+    font-size: 19px;
+    font-weight: 600;
+    color: #0B1324;
+    padding: 4px 0px;
+}
+
+QLabel[role="subtitle"] {
+    font-size: 12px;
+    color: #64748B;
+}
+
+/* ---------- Buttons ---------- */
+
+QPushButton {
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-weight: 600;
+}
+
+QPushButton:hover {
+    background-color: #0b1324;
+}
+
+QPushButton:pressed {
+    background-color: #0A7480;
+}
+
+QPushButton:disabled {
+    background-color: #B7C0CC;
+    color: #E5E7EB;
+}
+
+QPushButton:focus {
+    outline: none;
+    border: none;
+}
+
+QPushButton:focus-visible {
+    outline: none;
+}
+
+QPushButton::focus {
+    outline: none;
+}
+/* ---------- Inputs ---------- */
+
+QLineEdit, QTextEdit, QSpinBox, QComboBox {
+    background-color: #F8FAFC;           /* softer than pure white */
+    border: 1px solid #D8DEE7;           /* thinner border */
+    border-radius: 6px;                  /* slightly tighter */
+    padding: 6px 10px;                   /* cleaner spacing */
+    color: #1E293B;
+
+    selection-background-color: #A5EEF5;
+}
+
+/* Focus effect (important!) */
+QLineEdit:focus, QTextEdit:focus, QSpinBox:focus, QComboBox:focus {
+    border: 1px solid #0EA5B7;
+    background-color: white;
+
+    /* subtle glow effect */
+    outline: none;
+}
+
+/* ---------- Group boxes (cards) ---------- */
+
+QGroupBox {
+    background-color: white;
+    border: 1px solid #7c7c7c;
+    border-radius: 12px;
+    margin-top: 14px;
+    padding: 16px 12px 12px 12px;
+    font-weight: 600;
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top left;
+    left: 14px;
+    padding: 0px 6px;
+    color: #0C8C9B;
+}
+
+/* ---------- Tabs ---------- */
+
+QTabWidget::pane {
+    border: none;
+    background-color: transparent;
+    margin-top: 8px;
+}
+
+QTabBar {
+    qproperty-drawBase: 0;
+}
+
+QTabBar::tab {
+    background-color: transparent;
+    color: #94A3B8;
+  
+       
+
+    padding: 8px 20px;      /* ↓ slightly tighter vertically */
+    min-width: 120px;       /* ✅ equal width tabs */
+    
+    margin-right: 10px;     /* ✅ more breathing space */
+
+    border-bottom: 3px solid transparent;
+    font-weight: 600;
+    text-align: center;     /* ✅ better alignment */
+}
+
+QTabBar::tab:selected {
+    color: #0B1324;
+    border-bottom: 3px solid #0EA5B7;
+}
+
+QTabBar::tab:hover {
+    color: black;
+}
+
+/* ---------- Tables ---------- */
+
+QTableWidget {
+    background-color: white;
+    border: 1px solid #7c7c7c;
+    border-radius: 10px;
+    gridline-color: #7c7c7c;
+    selection-background-color: #CFF5FA;
+    selection-color: #0B1324;
+}
+
+QHeaderView::section {
+    background-color: white;
+    color: black;
+    padding: 9px;
+    border: none;
+    font-weight: 600;
+}
+
+QTableWidget::item {
+    padding: 6px;
+}
+
+/* ---------- Scrollbars ---------- */
+QScrollArea {
+    border: none;
+}
+
+QScrollBar:vertical {
+    width: 8px;
+    background: transparent;
+}
+
+QScrollBar::handle:vertical {
+    background: #0EA5B7;
+    border-radius: 4px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background: #0C8C9B;
+}
+
+QScrollBar:vertical {
+    background: #F4F6F9;
+    width: 10px;
+    margin: 0px;
+}
+
+QScrollBar::handle:vertical {
+    background: #CBD5E1;
+    border-radius: 5px;
+    min-height: 20px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background: #94A3B8;
+}
+
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    height: 0px;
+}
+
+/* ---------- Message boxes ---------- */
+
+QMessageBox {
+    background-color: white;
+}
+
+/* ---------- Top bar (main window) ---------- */
+
+QWidget#topBar {
+    background-color: #0B1324;
+    border-radius: 10px;
+}
+
+QLabel#userLabel {
+    background: transparent;
+    border: none;
+    color: white;
+    font-weight: 600;
+    padding: 8px;
+}
+
+QLabel#appNameLabel {
+    background: transparent;
+    border: none;
+    color: #7DD3E8;
+    font-weight: 700;
+    font-size: 15px;
+    padding: 8px;
+}
+

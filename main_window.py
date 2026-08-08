@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import (
     QTableWidget, QTableWidgetItem, QHeaderView, QFileDialog, QComboBox,
     QSpinBox, QGroupBox
 )
+from PyQt5.QtWidgets import QScrollArea
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
 import os
@@ -22,7 +23,7 @@ class MainWindow(QMainWindow):
         self.username = username
         self.on_logout = on_logout
 
-        self.setWindowTitle(f"Secure Document Management System - {username}")
+        self.setWindowTitle(f"STEGANSHIELD - {username}")
         self.setMinimumSize(800, 550)
 
         icon_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "logo.png")
@@ -35,7 +36,7 @@ class MainWindow(QMainWindow):
         central = QWidget()
         main_layout = QVBoxLayout()
         main_layout.setContentsMargins(16, 16, 16, 16)
-        main_layout.setSpacing(12)
+        main_layout.setSpacing(16)
 
         # Top bar with user info + logout
         top_bar_widget = QWidget()
@@ -43,7 +44,10 @@ class MainWindow(QMainWindow):
         top_bar = QHBoxLayout()
         top_bar.setContentsMargins(16, 10, 16, 10)
 
-        user_label = QLabel(f"👤  {self.username}")
+        app_name_label = QLabel("STEGANSHIELD")
+        app_name_label.setObjectName("appNameLabel")
+
+        user_label = QLabel("User: " f'{self.username}')
         user_label.setObjectName("userLabel")
 
         logout_btn = QPushButton("Logout")
@@ -51,8 +55,10 @@ class MainWindow(QMainWindow):
         logout_btn.setFixedWidth(90)
         logout_btn.clicked.connect(self._handle_logout)
 
-        top_bar.addWidget(user_label)
+        top_bar.addWidget(app_name_label)
         top_bar.addStretch()
+        top_bar.addWidget(user_label)
+        top_bar.addSpacing(12)
         top_bar.addWidget(logout_btn)
         top_bar_widget.setLayout(top_bar)
         main_layout.addWidget(top_bar_widget)
@@ -73,6 +79,7 @@ class MainWindow(QMainWindow):
     def _build_documents_tab(self) -> QWidget:
         tab = QWidget()
         layout = QHBoxLayout()
+        layout.setSpacing(20) 
 
         # Left: form for add/update
         form_box = QGroupBox("Add / Update Document")
@@ -175,10 +182,13 @@ class MainWindow(QMainWindow):
             QMessageBox.warning(self, "Missing Fields", "Title and content are required.")
             return
 
-        doc_id = documents.add_document(title, content, self.username)
-        QMessageBox.information(self, "Success", f"Document added with ID {doc_id}.")
-        self._clear_document_form()
-        self._refresh_documents()
+        try:
+            doc_id = documents.add_document(title, content, self.username)
+            QMessageBox.information(self, "Success", f"Document added with ID {doc_id}.")
+            self._clear_document_form()
+            self._refresh_documents()
+        except FileNotFoundError as e:
+            QMessageBox.critical(self, "Error", str(e))
 
     def _update_document(self) -> None:
         doc_id = self.doc_id_input.text().strip()
@@ -214,6 +224,8 @@ class MainWindow(QMainWindow):
             else:
                 QMessageBox.critical(self, "Error", "Document not found.")
 
+
+
     def _clear_document_form(self) -> None:
         self.doc_id_input.clear()
         self.doc_title_input.clear()
@@ -223,59 +235,83 @@ class MainWindow(QMainWindow):
 
     def _build_stego_tab(self) -> QWidget:
         tab = QWidget()
-        layout = QVBoxLayout()
 
-        # Encode section
+        # 👉 Main layout
+        main_layout = QVBoxLayout(tab)
+        main_layout.setContentsMargins(0, 0, 0, 0)
+
+        # 👉 Scroll Area
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        scroll.setFrameShape(QScrollArea.NoFrame)
+
+        # 👉 Container inside scroll
+        container = QWidget()
+        layout = QVBoxLayout(container)
+        layout.setContentsMargins(16, 16, 16, 16)
+        layout.setSpacing(16)
+
+        # ---------------- Encode Section ----------------
         encode_box = QGroupBox("Hide Message in Image")
         encode_layout = QFormLayout()
 
         self.stego_image_path = QLineEdit()
         browse_btn = QPushButton("Browse...")
         browse_btn.clicked.connect(self._browse_image)
+
         image_row = QHBoxLayout()
         image_row.addWidget(self.stego_image_path)
         image_row.addWidget(browse_btn)
 
         self.stego_message_input = QTextEdit()
-        self.stego_message_input.setFixedHeight(70)
+        self.stego_message_input.setFixedHeight(80)
+
+        encode_btn = QPushButton("Encode & Save as encoded.png")
+        encode_btn.clicked.connect(self._handle_encode)
 
         encode_layout.addRow("Image path:", image_row)
         encode_layout.addRow("Secret message:", self.stego_message_input)
-
-        encode_btn = QPushButton("Encode && Save as encoded.png")
-        encode_btn.clicked.connect(self._handle_encode)
         encode_layout.addRow(encode_btn)
 
         encode_box.setLayout(encode_layout)
 
-        # Decode section
+        # ---------------- Decode Section ----------------
         decode_box = QGroupBox("Extract Message from Image")
         decode_layout = QFormLayout()
 
         self.decode_image_path = QLineEdit()
         decode_browse_btn = QPushButton("Browse...")
         decode_browse_btn.clicked.connect(self._browse_decode_image)
+
         decode_row = QHBoxLayout()
         decode_row.addWidget(self.decode_image_path)
         decode_row.addWidget(decode_browse_btn)
 
         self.decode_output = QTextEdit()
-        self.decode_output.setFixedHeight(70)
+        self.decode_output.setFixedHeight(80)
         self.decode_output.setReadOnly(True)
 
-        decode_layout.addRow("Encoded image path:", decode_row)
         decode_btn = QPushButton("Decode")
         decode_btn.clicked.connect(self._handle_decode)
+
+        decode_layout.addRow("Encoded image path:", decode_row)
         decode_layout.addRow(decode_btn)
         decode_layout.addRow("Hidden message:", self.decode_output)
 
         decode_box.setLayout(decode_layout)
 
+        # 👉 Add sections
         layout.addWidget(encode_box)
         layout.addWidget(decode_box)
-        tab.setLayout(layout)
-        return tab
+        layout.addStretch()  # 👈 keeps spacing clean
 
+        # 👉 Set scroll content
+        scroll.setWidget(container)
+
+        # 👉 Add to tab
+        main_layout.addWidget(scroll)
+
+        return tab
     def _browse_image(self) -> None:
         path, _ = QFileDialog.getOpenFileName(self, "Select Image", "", "Images (*.png *.jpg *.jpeg *.bmp)")
         if path:
@@ -333,54 +369,88 @@ class MainWindow(QMainWindow):
 
     def _build_password_tab(self) -> QWidget:
         tab = QWidget()
-        layout = QVBoxLayout()
 
-        # Strength checker
+        # 👉 Main layout for tab
+        main_layout = QVBoxLayout(tab)
+        main_layout.setContentsMargins(0, 0, 0, 0)
+
+        # 👉 Scroll Area
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        scroll.setFrameShape(QScrollArea.NoFrame)
+
+        # 👉 Container inside scroll
+        container = QWidget()
+        layout = QVBoxLayout(container)
+        layout.setContentsMargins(16, 16, 16, 16)
+        layout.setSpacing(16)
+
+        # ---------------- Strength Checker ----------------
         strength_box = QGroupBox("Password Strength Checker")
         strength_layout = QFormLayout()
+
         self.pw_check_input = QLineEdit()
         self.pw_check_input.setEchoMode(QLineEdit.Password)
+
         self.pw_strength_result = QLabel("")
         self.pw_check_input.textChanged.connect(self._check_password_strength)
+
         strength_layout.addRow("Password:", self.pw_check_input)
         strength_layout.addRow("Result:", self.pw_strength_result)
         strength_box.setLayout(strength_layout)
 
-        # Generator
+        # ---------------- Generator ----------------
         gen_box = QGroupBox("Generate Strong Password")
         gen_layout = QFormLayout()
+
         self.pw_length_input = QSpinBox()
         self.pw_length_input.setRange(4, 64)
         self.pw_length_input.setValue(12)
+
         self.pw_generated_output = QLineEdit()
         self.pw_generated_output.setReadOnly(True)
+
         gen_btn = QPushButton("Generate")
         gen_btn.clicked.connect(self._generate_password)
+
         gen_layout.addRow("Length:", self.pw_length_input)
         gen_layout.addRow(gen_btn)
         gen_layout.addRow("Generated:", self.pw_generated_output)
         gen_box.setLayout(gen_layout)
 
-        # Hash generator
+        # ---------------- Hash Generator ----------------
         hash_box = QGroupBox("Hash Generator")
         hash_layout = QFormLayout()
+
         self.hash_text_input = QLineEdit()
+
         self.hash_algo_combo = QComboBox()
         self.hash_algo_combo.addItems(["sha256", "sha512", "md5"])
+
         self.hash_output = QLineEdit()
         self.hash_output.setReadOnly(True)
+
         hash_btn = QPushButton("Generate Hash")
         hash_btn.clicked.connect(self._generate_hash)
+
         hash_layout.addRow("Text:", self.hash_text_input)
         hash_layout.addRow("Algorithm:", self.hash_algo_combo)
         hash_layout.addRow(hash_btn)
         hash_layout.addRow("Hash:", self.hash_output)
         hash_box.setLayout(hash_layout)
 
+        # 👉 Add all sections
         layout.addWidget(strength_box)
         layout.addWidget(gen_box)
         layout.addWidget(hash_box)
-        tab.setLayout(layout)
+        layout.addStretch()  # 👈 important for clean spacing
+
+        # 👉 Set scroll content
+        scroll.setWidget(container)
+
+        # 👉 Add scroll to tab
+        main_layout.addWidget(scroll)
+
         return tab
 
     def _check_password_strength(self, text: str) -> None:
