@@ -58,7 +58,7 @@ QLabel[role="subtitle"] {
 /* ---------- Buttons ---------- */
 
 QPushButton {
-    background-color: black;
+    background-color: #0b1324;
     color: white;
     border: none;
     border-radius: 8px;
@@ -67,7 +67,7 @@ QPushButton {
 }
 
 QPushButton:hover {
-    background-color: #0b1324;
+    background-color: #091c45;
 }
 
 QPushButton:pressed {
@@ -90,6 +90,18 @@ QPushButton:focus-visible {
 
 QPushButton::focus {
     outline: none;
+}
+logoutbtn{
+        background-color: black;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-weight: 600;
+
+}
+logoutbtn:hover {
+    background-color: red;
 }
 /* ---------- Inputs ---------- */
 

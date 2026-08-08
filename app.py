@@ -18,9 +18,9 @@ class SplashScreen(QLabel):
         img_path = os.path.join(os.path.dirname(__file__), "assets", "bgimg.png")
         pixmap = QPixmap(img_path)
 
-        # 🔥 Resize image (scale down)
+        #  Resize image (scale down)
         scaled_pixmap = pixmap.scaled(
-            500, 300,  # 👈 adjust this (width, height)
+            500, 300,  #  adjust this (width, height)
             Qt.KeepAspectRatio,
             Qt.SmoothTransformation
         )

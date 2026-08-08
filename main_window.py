@@ -54,6 +54,17 @@ class MainWindow(QMainWindow):
         logout_btn.setProperty("role", "secondary")
         logout_btn.setFixedWidth(90)
         logout_btn.clicked.connect(self._handle_logout)
+        logout_btn.setStyleSheet("""
+            QPushButton {
+                background-color: #444;
+                color: white;
+                border-radius: 5px;
+                padding: 5px;
+            }
+            QPushButton:hover {
+                background-color: red;
+            }
+            """)
 
         top_bar.addWidget(app_name_label)
         top_bar.addStretch()
