@@ -18,7 +18,7 @@ def login_screen() -> str:
     """Show login/register screen until a user successfully logs in. Returns username."""
 
     while True:
-        print_header("SECURE DOCUMENT MANAGEMENT SYSTEM")
+        print_header("DOCUMENT SECURING SYSTEM")
         print("1. Login")
         print("2. Register")
         print("3. Exit")

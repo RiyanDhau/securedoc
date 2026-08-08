@@ -5,6 +5,8 @@ from PyQt5.QtWidgets import (
     QSpinBox, QGroupBox
 )
 from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QIcon
+import os
 
 import auth
 import documents
@@ -22,23 +24,38 @@ class MainWindow(QMainWindow):
 
         self.setWindowTitle(f"Secure Document Management System - {username}")
         self.setMinimumSize(800, 550)
+
+        icon_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "logo.png")
+        if os.path.exists(icon_path):
+            self.setWindowIcon(QIcon(icon_path))
+
         self._build_ui()
 
     def _build_ui(self):
         central = QWidget()
         main_layout = QVBoxLayout()
+        main_layout.setContentsMargins(16, 16, 16, 16)
+        main_layout.setSpacing(12)
 
         # Top bar with user info + logout
+        top_bar_widget = QWidget()
+        top_bar_widget.setObjectName("topBar")
         top_bar = QHBoxLayout()
-        user_label = QLabel(f"Logged in as: {self.username}")
-        user_label.setStyleSheet("font-weight: bold;")
+        top_bar.setContentsMargins(16, 10, 16, 10)
+
+        user_label = QLabel(f"👤  {self.username}")
+        user_label.setObjectName("userLabel")
+
         logout_btn = QPushButton("Logout")
+        logout_btn.setProperty("role", "secondary")
+        logout_btn.setFixedWidth(90)
         logout_btn.clicked.connect(self._handle_logout)
 
         top_bar.addWidget(user_label)
         top_bar.addStretch()
         top_bar.addWidget(logout_btn)
-        main_layout.addLayout(top_bar)
+        top_bar_widget.setLayout(top_bar)
+        main_layout.addWidget(top_bar_widget)
 
         # Tabs
         tabs = QTabWidget()

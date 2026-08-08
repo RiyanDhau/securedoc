@@ -1,10 +1,11 @@
 import sys
+import os
 from PyQt5.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit,
     QPushButton, QTabWidget, QMessageBox, QFormLayout
 )
 from PyQt5.QtCore import Qt
-
+from PyQt5.QtGui import QIcon
 import auth
 import password_tools
 
@@ -16,6 +17,9 @@ class LoginWindow(QWidget):
         super().__init__()
         self.on_login_success = on_login_success
         self.setWindowTitle("Secure Document Management System - Login")
+        icon_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "logo.png")
+        if os.path.exists(icon_path):
+            self.setWindowIcon(QIcon(icon_path))
         self.setFixedSize(420, 320)
         self._build_ui()
 

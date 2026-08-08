@@ -46,6 +46,9 @@ def encode_image(image_path: str, secret_message: str) -> None:
     print("[+] Message successfully encoded into 'encoded.png'")
 
 
+ 
+
+
 def decode_image(image_path: str) -> None:
     """Decode a hidden message from an image."""
 

@@ -2,5 +2,9 @@
     "riyandhau": {
         "password_hash": "00da084cbf9f14d706beac5ba810546f4dda4d2a4070e3d9b11a69f0133c4755",
         "salt": "lRkeTuR2aq1DESNI"
+    },
+    "riteshbuyo": {
+        "password_hash": "fa94534534ae585b8763813959ce8fb4c836348f7bce5ef47b3faf956e388b68",
+        "salt": "bDHiqCfmEqhOM2Yy"
     }
 }
