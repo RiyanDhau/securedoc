@@ -62,7 +62,7 @@ class MainWindow(QMainWindow):
                 padding: 5px;
             }
             QPushButton:hover {
-                background-color: red;
+                background-color: #750909;
             }
             """)
 
