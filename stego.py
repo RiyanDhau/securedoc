@@ -4,13 +4,21 @@ DELIMITER = '11111110'
 
 
 def to_binary(message: str) -> str:
-    """Convert string message to binary."""
-    return ''.join(format(ord(char), '08b') for char in message)
+    """Convert string message to binary using UTF-8 byte encoding.
+
+    Using UTF-8 bytes (instead of ord() per character) guarantees every
+    unit is exactly 8 bits, even for special characters like curly quotes
+    ('), em-dashes (\u2014), or accented letters, which have Unicode code
+    points above 255 and would otherwise break the fixed 8-bit alignment
+    this scheme depends on.
+    """
+    data = message.encode('utf-8')
+    return ''.join(format(byte, '08b') for byte in data)
 
 
 def encode_image(image_path: str, secret_message: str) -> None:
     """Encode a secret message into an image."""
-    
+
     # Open and ensure RGB format
     img = Image.open(image_path).convert("RGB")
     pixels = list(img.getdata())
@@ -46,9 +54,6 @@ def encode_image(image_path: str, secret_message: str) -> None:
     print("[+] Message successfully encoded into 'encoded.png'")
 
 
- 
-
-
 def decode_image(image_path: str) -> None:
     """Decode a hidden message from an image."""
 
@@ -67,19 +72,24 @@ def decode_image(image_path: str) -> None:
         for i in range(0, len(binary_data), 8)
     ]
 
-    message = ""
+    byte_values = bytearray()
 
     for byte in bytes_list:
         if byte == DELIMITER:
             break
-        message += chr(int(byte, 2))
+        byte_values.append(int(byte, 2))
+
+    # Decode the collected UTF-8 bytes back into a proper string.
+    # errors='replace' avoids a crash if the image was corrupted/altered
+    # and the byte stream isn't valid UTF-8 at some point.
+    message = byte_values.decode('utf-8', errors='replace')
 
     print("[+] Hidden message:", message)
 
 
 def main():
     """Main menu."""
-    
+
     print("1. Encode")
     print("2. Decode")
 
